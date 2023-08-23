@@ -3,20 +3,29 @@ import re
 
 DATA_FILE = "phonebook.txt"
 
-def validate_text(value):
-    pattern = r'a!b#c$d%e^f&g*h (i)j_k~l`m/n?o.p>q’ r]s[t{u}v=w+x-y\z'
 
+def validate_num(value: str) -> str:
     if not value:
-        return {"AttributeError": f"Запись отсутствует"}
+        return print('Запись отсутствует')
 
-    regex = re.compile(pattern)
-    match = regex.fullmatch(value)
+    match = re.findall(r'(\+7|8|7).*?(\d{3}).*?(\d{3}).*?(\d{2}).*?(\d{2})', value)
 
-    if not match:
-        return {
-            "ValueError": f"Ошибка! Запись содержит спец. символы Значение: '{value}'"
-        }
-    return match
+    if len(match) == 0:
+        return print(f"Ошибка! Номер введён в неферном формате")
+
+    return value
+
+
+def validate_text(value: str) -> str:
+    if not value:
+        return print('Запись отсутствует')
+
+    match = re.findall(r'[^\s\w]|_', value)
+
+    if len(match) > 0:
+        return print(f"Ошибка! Запись содержит спец. символы")
+
+    return value
 
 
 def load_data() -> list:
@@ -111,13 +120,36 @@ def add_entry(data: list) -> None:
     :return:
     """
     new_entry = []
-    name = input("Введите фамилию: ")
-    new_entry.append(validate_text(name))
-    new_entry.append(input("Введите имя: "))
-    new_entry.append(input("Введите отчество: "))
-    new_entry.append(input("Введите название организации: "))
-    new_entry.append(input("Введите рабочий телефон: "))
-    new_entry.append(input("Введите личный телефон: "))
+    while True:
+        first_name = input("Введите фамилию: ")
+        if first_name == validate_text(first_name):
+            new_entry.append(first_name)
+            break
+    while True:
+        last_name = input("Введите имя: ")
+        if last_name == validate_text(last_name):
+            new_entry.append(last_name)
+            break
+    while True:
+        surname = input("Введите отчество: ")
+        if surname == validate_text(surname):
+            new_entry.append(surname)
+            break
+    while True:
+        orgname = input("Введите название организации: ")
+        if orgname == validate_text(orgname):
+            new_entry.append(orgname)
+            break
+    while True:
+        job_num = input("Введите рабочий телефон: ")
+        if len(validate_num(job_num)) > 0:
+            new_entry.append(job_num)
+            break
+    while True:
+        home_num = input("Введите личный телефон: ")
+        if len(validate_num(home_num)) > 0:
+            new_entry.append(home_num)
+            break
     data.append(new_entry)
     save_data(data)
     print("Запись добавлена.")
