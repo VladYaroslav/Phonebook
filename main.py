@@ -140,14 +140,18 @@ def add_entry(data: list) -> None:
         if orgname == validate_text(orgname):
             new_entry.append(orgname)
             break
+    job_num = input("Введите рабочий телефон: ")
     while True:
-        job_num = input("Введите рабочий телефон: ")
-        if len(validate_num(job_num)) > 0:
+        if validate_num(job_num) == None:
+            home_num = input("Введите рабочий телефон: ")
+        elif len(validate_num(job_num)) > 0:
             new_entry.append(job_num)
             break
+    home_num = input("Введите личный телефон: ")
     while True:
-        home_num = input("Введите личный телефон: ")
-        if len(validate_num(home_num)) > 0:
+        if validate_num(home_num) == None:
+            home_num = input("Введите личный телефон: ")
+        elif len(validate_num(home_num)) > 0:
             new_entry.append(home_num)
             break
     data.append(new_entry)
